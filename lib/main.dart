@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_list_view/list_view.dart';
 import 'package:tugas_list_view/data_object.dart';
+import 'package:tugas_list_view/tabbar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.orange,
       ),
-      home: listkelas(),
+      home: TabbarExample(),
     );
   }
 }
