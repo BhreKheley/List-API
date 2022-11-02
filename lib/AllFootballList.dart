@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tugas_list_view/DetailPage.dart';
 import 'package:tugas_list_view/ModelPremierLeague.dart';
 import 'dart:convert';
+import 'package:favorite_button/favorite_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:tugas_list_view/favList.dart';
 
 class ListAllFootbal extends StatefulWidget {
   const ListAllFootbal({Key? key}) : super(key: key);
@@ -43,6 +45,14 @@ class _ListAllFootbalState extends State<ListAllFootbal> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ListFav()));
+              },
+              icon: Icon(Icons.favorite))
+        ],
         title: Text("List Premiere League"),
       ),
       body: Center(
@@ -80,7 +90,7 @@ class _ListAllFootbalState extends State<ListAllFootbal> {
                                   Text(premiereLeague!.teams![index].strStadium
                                       .toString()),
                                 ],
-                              )
+                              ),
                             ],
                           ),
                         ),

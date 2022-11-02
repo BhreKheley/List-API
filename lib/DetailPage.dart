@@ -1,7 +1,11 @@
+import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:tugas_list_view/ModelPremierLeague.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:tugas_list_view/AllFootballList.dart';
+
+import 'dbFootball.dart';
+import 'favorite.dart';
 
 class DetailPage extends StatefulWidget {
   DetailPage({Key? key, required this.teams}) : super(key: key);
@@ -12,10 +16,43 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  bool favbutton = false;
+
+  Future read() async {
+    favbutton =
+        await FootballDatabase.instance.read(widget.teams.strTeam.toString());
+    setState(() {});
+  }
+
+  Future addData() async {
+    var list;
+    list = PremierLeagueFootballFav(
+        title: widget.teams.strTeam.toString(),
+        teambadge: widget.teams.strTeamBadge.toString());
+    await FootballDatabase.instance.create(list);
+    setState(() {
+      favbutton = true;
+    });
+  }
+
+  Future deleteData() async {
+    await FootballDatabase.instance.delete(widget.teams.strTeam.toString());
+    setState(() {
+      favbutton = false;
+    });
+  }
+
   Future<void> _launchInBrowser(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {}
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    read();
   }
 
   @override
@@ -72,6 +109,7 @@ class _DetailPageState extends State<DetailPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
+                          margin: EdgeInsets.only(bottom: 10),
                           width: 35,
                           height: 35,
                           child: InkWell(
@@ -85,6 +123,7 @@ class _DetailPageState extends State<DetailPage> {
                                     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Instagram-Icon.png/1200px-Instagram-Icon.png")),
                           )),
                       Container(
+                          margin: EdgeInsets.only(bottom: 10),
                           width: 35,
                           height: 35,
                           child: InkWell(
@@ -98,6 +137,15 @@ class _DetailPageState extends State<DetailPage> {
                                     "https://www.facebook.com/images/fb_icon_325x325.png")),
                           )),
                       Container(
+                          child: IconButton(
+                        onPressed: (() {
+                          favbutton ? deleteData() : addData();
+                        }),
+                        icon: Icon(Icons.favorite),
+                        color: favbutton ? Colors.red : Colors.grey,
+                      )),
+                      Container(
+                          margin: EdgeInsets.only(bottom: 10),
                           width: 35,
                           height: 35,
                           child: InkWell(
@@ -111,6 +159,7 @@ class _DetailPageState extends State<DetailPage> {
                                     "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Twitter-logo.svg/1200px-Twitter-logo.svg.png")),
                           )),
                       Container(
+                          margin: EdgeInsets.only(bottom: 10),
                           width: 35,
                           height: 35,
                           child: InkWell(
